@@ -1,51 +1,37 @@
-import { useState } from 'react';
+import useText from '../hooks/use-text';
 
 const BasicForm = () => {
-    const [firstName, setFirstName] = useState('');
-    const [firstNameTouched, setFirstNameTouched] = useState(false);
+    const {
+        value: firstName,
+        isValid: firstNameIsValid,
+        hasError: firstNameInvalid,
+        inputChangeHandler: firstNameChangeHandler,
+        inputBlurHandler: firstNameBlurHandler,
+        reset: resetFirstName
+    } = useText(value => value.trim() !== '') 
 
-    const [lastName, setLastName] = useState('');
-    const [lastNameTouched, setLastNameTouched] = useState(false);
+    const {
+        value: lastName,
+        isValid: lastNameIsValid,
+        hasError: lastNameInvalid,
+        inputChangeHandler: lastNameChangeHandler,
+        inputBlurHandler: lastNameBlurHandler,
+        reset: resetLastName
+    } = useText(value => value.trim() !== '')
 
-    const [email, setEmail] = useState('');
-    const [emailTouched, setEmailTouched] = useState(false);
-
-    const firstNameIsValid = firstName.trim() !== '';
-    const lastNameIsValid = lastName.trim() !== '';
-    const emailIsValid = email.includes('@');
-
-    const firstNameInvalid = !firstNameIsValid && firstNameTouched;
-    const lastNameInvalid = !lastNameIsValid && lastNameTouched;
-    const emailInvalid = !emailIsValid && emailTouched;
+    const {
+        value: email,
+        isValid: emailIsValid,
+        hasError: emailInvalid,
+        inputChangeHandler: emailChangeHandler,
+        inputBlurHandler: emailBlurHandler,
+        reset: resetEmail
+    } = useText(value => value.includes('@'))
 
     let formIsValid = false;
     
     if(firstNameIsValid && lastNameIsValid && emailIsValid) {
         formIsValid = true;
-    }
-
-    const firstNameChangeHandler = event => {
-        setFirstName(event.target.value);
-    }
-
-    const firstNameBlurHandler = () => {
-        setFirstNameTouched(true);
-    }
-
-    const lastNameChangeHandler = event => {
-        setLastName(event.target.value);
-    }
-
-    const lastNameBlurHandler = () => {
-        setLastNameTouched(true);
-    }
-
-    const emailChangeHandler = event => {
-        setEmail(event.target.value)
-    }
-
-    const emailBlurHandler = () => {
-        setEmailTouched(true);
     }
 
     const submitHandler = event => {
@@ -55,13 +41,9 @@ const BasicForm = () => {
         console.log(lastName);
         console.log(email);
 
-        setFirstName('');
-        setLastName('');
-        setEmail('');
-
-        setFirstNameTouched(false);
-        setLastNameTouched(false);
-        setEmailTouched(false);
+        resetFirstName();
+        resetLastName();
+        resetEmail();
     }
 
     const firstNameInputClasses = firstNameInvalid ? 'form-control invalid' : 'form-control';
